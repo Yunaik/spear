@@ -151,18 +151,18 @@ if __name__ == "__main__":
                 pos_offset[1] = 0
 
             spear_instance.engine_service.begin_tick()
-            # pelvis_z = bones_data["pelvis"]["location"][1] * 100
-            # args = {"BoneName": "Hips", "BoneSpace": SPACE}
-            # return_values = spear_instance.unreal_service.call_function(
-            #     uobject=poseable_mesh_component,
-            #     ufunction=get_bone_transform_by_name_func,
-            #     args=args,
-            # )
-            # pelvis_ue_z = return_values["ReturnValue"]["translation"]["z"]
+            pelvis_z = bones_data["pelvis"]["location"][1] * 100
+            args = {"BoneName": "Hips", "BoneSpace": SPACE}
+            return_values = spear_instance.unreal_service.call_function(
+                uobject=poseable_mesh_component,
+                ufunction=get_bone_transform_by_name_func,
+                args=args,
+            )
+            pelvis_ue_z = return_values["ReturnValue"]["translation"]["z"]
             for bone_name_ue, bone_name_ref_data in skeleton_mapping.items():
-                # print(
-                #     f'{bone_name_ue} z distance to pelvis: {bones_data[bone_name_ref_data]["location"][1]*100- pelvis_z :.2f} '
-                # )
+                print(
+                    f'{bone_name_ue} z distance to pelvis: {bones_data[bone_name_ref_data]["location"][1]*100- pelvis_z :.2f} '
+                )
                 # continue
                 # if not (bone_name_ue == "Head"):
                 #     continue
@@ -194,14 +194,21 @@ if __name__ == "__main__":
                     "BoneSpace": SPACE,
                 }
 
-                # args["InTransform"]["translation"]["x"] = translation[0]
-                # args["InTransform"]["translation"]["y"] = translation[1]
-                # args["InTransform"]["translation"]["z"] = translation[2]
+                args["InTransform"]["translation"]["x"] = translation[0]
+                args["InTransform"]["translation"]["y"] = translation[1]
+                args["InTransform"]["translation"]["z"] = translation[2]
 
-                args["InTransform"]["rotation"]["w"] = rotation.as_quat()[3]
-                args["InTransform"]["rotation"]["x"] = rotation.as_quat()[0]
-                args["InTransform"]["rotation"]["y"] = rotation.as_quat()[1]
-                args["InTransform"]["rotation"]["z"] = rotation.as_quat()[2]
+                # args["InTransform"]["rotation"]["w"] = rotation.as_quat()[3]
+                # args["InTransform"]["rotation"]["x"] = rotation.as_quat()[0]
+                # args["InTransform"]["rotation"]["y"] = rotation.as_quat()[1]
+                # args["InTransform"]["rotation"]["z"] = rotation.as_quat()[2]
+
+                args = {"BoneName": bone_name_ue, "BoneSpace": SPACE}
+                return_values = spear_instance.unreal_service.call_function(
+                    uobject=poseable_mesh_component,
+                    ufunction=get_bone_transform_by_name_func,
+                    args=args,
+                )
 
                 spear_instance.unreal_service.call_function(
                     uobject=poseable_mesh_component,
@@ -209,18 +216,12 @@ if __name__ == "__main__":
                     args=args,
                 )
 
-                # args = {"BoneName": bone_name_ue, "BoneSpace": SPACE}
-                # return_values = spear_instance.unreal_service.call_function(
-                #     uobject=poseable_mesh_component,
-                #     ufunction=get_bone_transform_by_name_func,
-                #     args=args,
-                # )
-                # print(
-                #     f'{bone_name_ue} z distance to pelvis for UE: {return_values["ReturnValue"]["translation"]["z"]- pelvis_ue_z :.2f} '
-                # )
-                # print(
-                #     f'{bone_name_ue} difference in z: {translation[2] - return_values["ReturnValue"]["translation"]["z"]:.2f} with blender: {translation[2]:.2f} and ue: {return_values["ReturnValue"]["translation"]["z"]:.2f}'
-                # )
+                print(
+                    f'{bone_name_ue} z distance to pelvis for UE: {return_values["ReturnValue"]["translation"]["z"]- pelvis_ue_z :.2f} '
+                )
+                print(
+                    f'{bone_name_ue} difference in z: {translation[2] - return_values["ReturnValue"]["translation"]["z"]:.2f} with blender: {translation[2]:.2f} and ue: {return_values["ReturnValue"]["translation"]["z"]:.2f}'
+                )
             spear_instance.engine_service.tick()
             spear_instance.engine_service.end_tick()
             print("Tick finished")
