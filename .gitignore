@@ -1,3 +1,6 @@
+Standalone-Development/
+.vscode
+.DS_Store
 __pycache__
 
 cpp/unreal_plugins/*/Binaries
